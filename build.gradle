@@ -1,19 +1,47 @@
 plugins {
     id 'java'
+    id 'org.sonarqube' version '4.4.1.3373'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'au.com.tami.automation'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // Selenium
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
+
+    // Cucumber + JUnit
+    testImplementation 'io.cucumber:cucumber-java:7.22.1'
+    testImplementation 'io.cucumber:cucumber-junit:7.22.1'
+    testImplementation 'junit:junit:4.13.2'
+
+    // Allure Reporting for Cucumber
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
+
+    // Utility libraries
+   // implementation 'com.github.javafaker:javafaker:1.0.2'
 }
 
 test {
-    useJUnitPlatform()
+    useJUnit()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+allure {
+    version = '2.24.0'
+    autoconfigure = true
+    aspectjweaver = true
 }
