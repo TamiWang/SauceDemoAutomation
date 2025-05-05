@@ -5,7 +5,7 @@ import org.openqa.selenium.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
+import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
 public final class AllureReporter {
@@ -15,9 +15,9 @@ public final class AllureReporter {
     private AllureReporter() {}
 
     public static void captureScreenshot(WebDriver driver, String attachmentName) {
-        getScreenshot(driver).ifPresent(screenshot ->
-                Allure.addAttachment(attachmentName, "image/png", "png", Arrays.toString(screenshot))
-        );
+        getScreenshot(driver).ifPresent(screenshot -> {
+            Allure.addAttachment(attachmentName, "image/png", new ByteArrayInputStream(screenshot), ".png");
+        });
     }
 
     public static void capturePageSource(WebDriver driver, String attachmentName) {
@@ -27,6 +27,18 @@ public final class AllureReporter {
                         Allure.addAttachment(attachmentName, "text/html", pageSource)
                 );
     }
+
+    public static void attachText(String attachmentName, String content) {
+        Allure.addAttachment(attachmentName, "text/plain", content);
+    }
+
+    public static void stepWithScreenshot(WebDriver driver, String stepDescription, Runnable stepAction) {
+        Allure.step(stepDescription, () -> {
+            stepAction.run();
+            captureScreenshot(driver, stepDescription);
+        });
+    }
+
 
     private static Optional<byte[]> getScreenshot(WebDriver driver) {
         try {

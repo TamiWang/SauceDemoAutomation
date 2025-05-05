@@ -28,9 +28,10 @@ dependencies {
     // JUnit
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.0'
 
     // Allure Reporting
-    implementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
+    implementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
     implementation 'io.qameta.allure:allure-java-commons:2.29.1'
 
     // Logging
@@ -43,16 +44,14 @@ test {
 
     testLogging {
         events "passed", "skipped", "failed"
-        showExceptions true
-        showCauses true
-        showStackTraces true
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
     }
 }
 
 allure {
     version = '2.24.0'
-    autoconfigure = true
-    aspectjweaver = true
     adapter {
         frameworks {
             cucumberJvm {

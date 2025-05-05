@@ -7,14 +7,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DriverFactory {
     private static WebDriver driver;
-    private static Logger logger = LoggerFactory.getLogger(DriverFactory.class);
 
     public static WebDriver initDriver() {
         if (driver == null) {
@@ -50,14 +49,20 @@ public class DriverFactory {
                 "--disable-gpu",
                 "--no-sandbox",
                 "--disable-dev-shm-usage",
-                "--window-size=1920,1080"
+                "--window-size=1920,1080",
+                "--disable-notifications",
+                "--disable-infobars"
         ));
 
-        // Enable performance logging
-        options.setCapability("goog:loggingPrefs", "{\"performance\": \"ALL\"}");
+        // Disable password manager popups
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("credentials_enable_service", false);
+        prefs.put("profile.password_manager_enabled", false);
+        options.setExperimentalOption("prefs", prefs);
 
         return options;
     }
+
 
     private static FirefoxOptions getFirefoxOptions() {
         FirefoxOptions options = new FirefoxOptions();
