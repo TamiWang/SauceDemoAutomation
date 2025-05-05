@@ -19,24 +19,33 @@ repositories {
 
 dependencies {
     // Selenium
-    testImplementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.31.0'
 
     // Cucumber + JUnit
     testImplementation 'io.cucumber:cucumber-java:7.22.1'
-    testImplementation 'io.cucumber:cucumber-junit:7.22.1'
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.22.1'
 
-    // Allure Reporting for Cucumber
-    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
+    // JUnit
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 
-    // Utility libraries
-   // implementation 'com.github.javafaker:javafaker:1.0.2'
+    // Allure Reporting
+    implementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
+    implementation 'io.qameta.allure:allure-java-commons:2.29.1'
+
+    // Logging
+    implementation 'org.slf4j:slf4j-simple:2.0.9'
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform()
+    systemProperty("cucumber.junit-platform.naming-strategy", "long")
+
     testLogging {
         events "passed", "skipped", "failed"
+        showExceptions true
+        showCauses true
+        showStackTraces true
     }
 }
 
@@ -44,4 +53,11 @@ allure {
     version = '2.24.0'
     autoconfigure = true
     aspectjweaver = true
+    adapter {
+        frameworks {
+            cucumberJvm {
+                enabled = true
+            }
+        }
+    }
 }
