@@ -1,43 +1,46 @@
 package utils;
 
-import java.io.BufferedReader;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CsvDataLoader {
-    public static List<Map<String, String>> loadTestData(String resourcePath) {
+
+    public static List<Map<String, String>> loadTestData(String filename) {
+        String profile = System.getProperty("test-profile", "SIT"); // default to SIT if not set
+        String fullPath = "test-data/" + profile + "/" + filename;
+
         List<Map<String, String>> data = new ArrayList<>();
 
-        try (InputStream inputStream = CsvDataLoader.class.getClassLoader().getResourceAsStream(resourcePath)) {
+        try (InputStream inputStream = CsvDataLoader.class.getClassLoader().getResourceAsStream(fullPath)) {
             if (inputStream == null) {
-                throw new RuntimeException("File not found in classpath: " + resourcePath);
+                throw new RuntimeException("Test data file not found: " + fullPath);
             }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String[] headers = reader.readLine().split(",");
+            CSVReader reader = new CSVReader(new InputStreamReader(inputStream));
+            String[] headers = reader.readNext(); // first row as headers
+            if (headers == null) {
+                throw new RuntimeException("CSV file is empty: " + fullPath);
+            }
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",", -1); // preserve empty trailing fields
+            String[] values;
+            while ((values = reader.readNext()) != null) {
                 Map<String, String> row = new HashMap<>();
-
                 for (int i = 0; i < headers.length; i++) {
                     String key = headers[i].trim();
                     String value = (i < values.length) ? values[i].trim() : "";
                     row.put(key, value);
                 }
-
                 data.add(row);
             }
+
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load test data from " + resourcePath, e);
+            throw new RuntimeException("Failed to load test data from " + fullPath, e);
         }
 
         return data;
     }
 }
-

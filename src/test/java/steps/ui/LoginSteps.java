@@ -3,7 +3,6 @@ package steps.ui;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.qameta.allure.Allure;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import pages.LoginPage;
@@ -11,8 +10,8 @@ import pages.ProductsPage;
 import utils.AllureReporter;
 import utils.CsvDataLoader;
 import utils.DriverFactory;
-import utils.PerformanceAsserter;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +24,12 @@ public class LoginSteps {
     @Given("The user opens the SauceDemo login page")
     public void open_browser() {
         driver = DriverFactory.initDriver();
-        driver.get("https://www.saucedemo.com/");
         loginPage = new LoginPage(driver);
     }
 
     @When("^the user logs in using credentials from (.+)$")
     public void login_using_csv(String filename) {
-        String filePath = "test-data/" + filename;
-        testData = CsvDataLoader.loadTestData(filePath);
+        testData = CsvDataLoader.loadTestData(filename);
     }
 
     @Then("the login outcomes should match the expected results")
@@ -53,26 +50,41 @@ public class LoginSteps {
                             "Expected Message: " + expectedMessage);
 
             try {
-                driver.get("https://www.saucedemo.com/");
+                loginPage.open();
+
                 AllureReporter.stepWithScreenshot(driver, "Enter username", () -> loginPage.enterUsername(username));
                 AllureReporter.stepWithScreenshot(driver, "Enter password", () -> loginPage.enterPassword(password));
+
+                // Record start time before clickLogin() to measure the performance for performance_glitch case
+                long start = System.currentTimeMillis();
+
                 AllureReporter.stepWithScreenshot(driver, "Click login", () -> loginPage.clickLogin());
 
+                productsPage = new ProductsPage(driver);
 
-                // Performance assertion
-                long startTime = System.currentTimeMillis();
-                boolean success = loginPage.waitForInventoryPage();
-                long duration = System.currentTimeMillis() - startTime;
-                PerformanceAsserter.assertUnderMillis("Login", duration, 10000);
-                Assertions.assertTrue(success, "Login failed — inventory page not loaded.");
+                switch (expectedResult) {
+                    case "success":
+                        Assertions.assertTrue(productsPage.waitForInventoryPage(Duration.ofSeconds(5)),
+                                "Expected successful login for user: " + username);
+                        break;
+                    case "locked_out":
+                        Assertions.assertEquals(expectedMessage, loginPage.getErrorMessage());
+                        break;
+                    case "performance_glitch":
+                        boolean pageLoaded = productsPage.waitForInventoryPage(Duration.ofSeconds(5));
+                        long duration = System.currentTimeMillis() - start;
 
-                if ("success".equalsIgnoreCase(expectedResult)) {
-                    Assertions.assertTrue(loginPage.isOnProductsPage(),
-                            "Expected successful login for user: " + username);
-                } else {
-                    String actualMessage = loginPage.getErrorMessageIfExists();
-                    Assertions.assertTrue(actualMessage.contains(expectedMessage),
-                            "Expected error message: '" + expectedMessage + "', but got: '" + actualMessage + "'");
+                        AllureReporter.attachText("Performance result",
+                                "Username: " + username + "\n" +
+                                        "Duration: " + duration + " ms\n" +
+                                        "Page Loaded: " + pageLoaded);
+
+                        // Expect it to be slow (> 4000ms)
+                        Assertions.assertTrue(pageLoaded, "Page did not load at all.");
+                        Assertions.assertTrue(duration > 4000, "Expected slow login, but it completed in " + duration + " ms.");
+                        break;
+                    default:
+                        Assertions.fail("Unhandled expected result: " + expectedResult);
                 }
             } catch (AssertionError | Exception e) {
                 AllureReporter.captureScreenshot(driver, "Failure - " + username);

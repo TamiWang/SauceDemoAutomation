@@ -7,6 +7,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +17,7 @@ import java.util.Map;
 
 public class DriverFactory {
     private static WebDriver driver;
+    private static final Logger logger = LoggerFactory.getLogger(DriverFactory.class);
 
     public static WebDriver initDriver() {
         if (driver == null) {
@@ -40,12 +44,19 @@ public class DriverFactory {
         ChromeOptions options = new ChromeOptions();
 
         // Add headless mode if specified
-        if (Boolean.parseBoolean(System.getProperty("headless", "false"))) {
+        if (Boolean.parseBoolean(System.getProperty("headless", "true"))) {
             options.addArguments("--headless=new");
+            logger.info("Running in headless mode");
+        }
+
+        if (Boolean.parseBoolean(System.getProperty("chrome.guest.mode", "true"))) {
+            options.addArguments("--guest");
+            logger.info("Running in guest mode");
         }
 
         // Add other common Chrome options
         options.addArguments(Arrays.asList(
+                "--disable-save-password-bubble",
                 "--disable-gpu",
                 "--no-sandbox",
                 "--disable-dev-shm-usage",

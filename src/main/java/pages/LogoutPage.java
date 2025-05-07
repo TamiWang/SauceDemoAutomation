@@ -8,8 +8,8 @@ public class LogoutPage {
     private final WebDriver driver;
 
     // Locators
-    private final By menuButton    = By.id("react-burger-menu-btn");
-    private final By logoutLink    = By.id("logout_sidebar_link");
+    private final By menuButton = By.id("react-burger-menu-btn");
+    private final By logoutLink = By.id("logout_sidebar_link");
 
     public LogoutPage(WebDriver driver) {
         this.driver = driver;

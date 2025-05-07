@@ -1,10 +1,9 @@
 plugins {
     id 'java'
-    id 'org.sonarqube' version '4.4.1.3373'
     id 'io.qameta.allure' version '2.11.2'
 }
 
-group = 'au.com.tami.automation'
+group = 'com.tami.saucedemo'
 version = '1.0.0'
 
 java {
@@ -34,6 +33,9 @@ dependencies {
     implementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
     implementation 'io.qameta.allure:allure-java-commons:2.29.1'
 
+    // CSV
+    implementation 'com.opencsv:opencsv:5.10'
+
     // Logging
     implementation 'org.slf4j:slf4j-simple:2.0.9'
 }
@@ -48,6 +50,14 @@ test {
         showCauses = true
         showStackTraces = true
     }
+}
+
+test {
+    systemProperty "test-profile", project.properties['test-profile']
+    systemProperty "cucumber.filter.tags", project.properties['cucumber.filter.tags']
+    systemProperty "browser", project.properties['browser']
+    systemProperty "headless", project.properties['headless']
+    systemProperty "chrome.guest.mode", project.properties['chrome.guest.mode']
 }
 
 allure {
