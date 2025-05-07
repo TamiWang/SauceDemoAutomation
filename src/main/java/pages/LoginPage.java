@@ -15,6 +15,8 @@ public class LoginPage {
     private final By passwordField = By.id("password");
     private final By loginButton = By.id("login-button");
     private final By errorMessage = By.cssSelector("h3[data-test='error']");
+    private final By swagLabsTitle = By.cssSelector("div.app_logo");
+
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -42,4 +44,8 @@ public class LoginPage {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
     }
-}
+
+    public boolean isLoginSuccessful() {
+        return driver.findElement(swagLabsTitle).isDisplayed();
+    }
+ }

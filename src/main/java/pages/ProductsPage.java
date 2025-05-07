@@ -16,15 +16,13 @@ public class ProductsPage {
     private static final Logger logger = LoggerFactory.getLogger(ProductsPage.class);
 
     private final By inventoryContainer = By.id("inventory_container");
-    private final By inventoryList = By.cssSelector(".inventory_list");
+    private final By firstAddToCartButton = By.cssSelector(".inventory_list .inventory_item:first-of-type button");
+    private final By firstProductName = By.cssSelector(".inventory_list .inventory_item:first-of-type .inventory_item_name");
+    private final By cartIcon = By.className("shopping_cart_link");
 
     public ProductsPage(WebDriver driver) {
         this.driver = driver;
     }
-
-//    public boolean isDisplayed() {
-//        return driver.findElement(inventoryContainer).isDisplayed();
-//    }
 
     public boolean waitForInventoryPage(Duration timeout) {
         try {
@@ -40,6 +38,18 @@ public class ProductsPage {
             AllureReporter.capturePageSource(driver, "LoginTimeout_PageSource");
             return false;
         }
+    }
+
+    public void addFirstProductToCart() {
+        driver.findElement(firstAddToCartButton).click();
+    }
+
+    public String getFirstProductName() {
+        return driver.findElement(firstProductName).getText();
+    }
+
+    public void clickCart() {
+        driver.findElement(cartIcon).click();
     }
 }
 
