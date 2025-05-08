@@ -45,7 +45,7 @@ public class ProductPurchaseSteps {
     public void theUserReviewsAndCompletesPurchase() {
         checkoutOverviewPage = new CheckoutOverviewPage(driver);
 
-        Assertions.assertEquals("selectedProductName", checkoutOverviewPage.getProductName(),
+        Assertions.assertEquals(selectedProductName, checkoutOverviewPage.getProductName(),
                 "Product name in cart doesn't match selected product name.");
         Assertions.assertEquals(selectedProductPrice, checkoutOverviewPage.getProductPrice(),
                 "Product price in cart doesn't match selected product price.");
