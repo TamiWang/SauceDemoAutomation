@@ -44,6 +44,11 @@ dependencies {
 test {
     useJUnitPlatform()
     systemProperty("cucumber.junit-platform.naming-strategy", "long")
+    systemProperty "test-profile", project.findProperty('test-profile') ?: 'default'
+    systemProperty "cucumber.filter.tags", project.findProperty('cucumber.filter.tags') ?: ''
+    systemProperty "browser", project.findProperty('browser') ?: 'chrome'
+    systemProperty "headless", project.findProperty('headless') ?: 'true'
+    systemProperty "chrome.guest.mode", project.findProperty('chrome.guest.mode') ?: 'true'
 
     testLogging {
         events "passed", "skipped", "failed"
@@ -53,21 +58,6 @@ test {
     }
 }
 
-test {
-    systemProperty "test-profile", project.properties['test-profile']
-    systemProperty "cucumber.filter.tags", project.properties['cucumber.filter.tags']
-    systemProperty "browser", project.properties['browser']
-    systemProperty "headless", project.properties['headless']
-    systemProperty "chrome.guest.mode", project.properties['chrome.guest.mode']
-}
-
 allure {
-    version = '2.24.0'
-    adapter {
-        frameworks {
-            cucumberJvm {
-                enabled = true
-            }
-        }
-    }
+    version = '2.29.1'
 }
