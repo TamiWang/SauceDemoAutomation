@@ -10,7 +10,7 @@ import utils.AllureReporter;
 import utils.DriverFactory;
 
 public class ProductPurchaseSteps {
-    private final WebDriver driver = DriverFactory.getDriver();
+    private final WebDriver driver = DriverFactory.getInstance().getDriver();
     private ProductsPage productsPage;
     private CartPage cartPage;
     private CheckoutInfoPage checkoutInfoPage;

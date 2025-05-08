@@ -1,13 +1,10 @@
 package hooks;
 
-import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.After;
 import io.cucumber.java.Scenario;
-import io.qameta.allure.Allure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.AllureReporter;
 import utils.DriverFactory;
 
 public class Hooks {

@@ -22,7 +22,6 @@ dependencies {
 
     // Cucumber + JUnit
     testImplementation 'io.cucumber:cucumber-java:7.22.1'
-    testImplementation 'io.cucumber:cucumber-picocontainer:7.22.1'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.22.1'
 
     // JUnit
@@ -32,7 +31,7 @@ dependencies {
 
     // Allure Reporting
     implementation 'io.qameta.allure:allure-cucumber7-jvm:2.25.0'
-    implementation 'io.qameta.allure:allure-java-commons:2.29.1'
+    implementation 'io.qameta.allure:allure-java-commons:2.24.0'
 
     // CSV
     implementation 'com.opencsv:opencsv:5.10'
@@ -59,5 +58,5 @@ test {
 }
 
 allure {
-    version = '2.29.1'
+    version = '2.24.0'
 }

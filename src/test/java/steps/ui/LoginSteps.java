@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginSteps {
-    private final WebDriver driver = DriverFactory.getDriver();
+    private final WebDriver driver = DriverFactory.getInstance().getDriver();
     private LoginPage loginPage;
     private ProductsPage productsPage;
     private List<Map<String, String>> testData;

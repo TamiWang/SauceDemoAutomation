@@ -44,17 +44,4 @@ public final class AllureReporter {
             captureScreenshot(driver, stepDescription);
         });
     }
-
-
-    private static Optional<byte[]> getScreenshot(WebDriver driver) {
-        try {
-            return Optional.ofNullable(driver)
-                    .filter(TakesScreenshot.class::isInstance)
-                    .map(TakesScreenshot.class::cast)
-                    .map(ts -> ts.getScreenshotAs(OutputType.BYTES));
-        } catch (WebDriverException e) {
-            logger.error("Failed to capture screenshot: {}", e.getMessage(), e);
-            return Optional.empty();
-        }
-    }
 }

@@ -16,11 +16,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DriverFactory {
+    private static DriverFactory instance;
     private static WebDriver driver;
     private static final Logger logger = LoggerFactory.getLogger(DriverFactory.class);
 
     private DriverFactory() {
         initDriver();
+    }
+
+    // Thread-safe Singleton getter method ensures only one instance is created
+    public static synchronized DriverFactory getInstance() {
+        if (instance == null) {
+            instance = new DriverFactory();
+        }
+        return instance;
     }
 
     public static void initDriver() {
@@ -43,7 +52,7 @@ public class DriverFactory {
         }
     }
 
-    public static WebDriver getDriver() {
+    public WebDriver getDriver() {
         return driver;
     }
 
@@ -57,7 +66,6 @@ public class DriverFactory {
     private static ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
 
-        // Add headless mode if specified
         if (Boolean.parseBoolean(System.getProperty("headless", "true"))) {
             options.addArguments("--headless=new");
             logger.info("Running in headless mode");

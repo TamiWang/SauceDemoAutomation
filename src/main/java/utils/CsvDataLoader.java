@@ -1,8 +1,6 @@
 package utils;
 
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -10,7 +8,7 @@ import java.util.*;
 public class CsvDataLoader {
 
     public static List<Map<String, String>> loadTestData(String filename) {
-        String profile = System.getProperty("test-profile", "SIT"); // default to SIT if not set
+        String profile = System.getProperty("test-profile", "sit"); // default to sit if not set
         String fullPath = "test-data/" + profile + "/" + filename;
 
         List<Map<String, String>> data = new ArrayList<>();
