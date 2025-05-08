@@ -10,9 +10,10 @@ It covers main user flows on www.saucedemo.com, including login, product purchas
    cd SauceDemoAutomation
    
 2. **Run Tests**
-   ###Run default test suite:
    ```bash
    ./gradlew clean test
+   or
+   ./gradlew clean test -Dcucumber.filter.tags="@smoke" -Dchrome.guest.mode=true
 
 3. **Generate Allure Report**
    ```bash
