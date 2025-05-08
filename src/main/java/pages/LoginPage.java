@@ -48,4 +48,9 @@ public class LoginPage {
     public boolean isLoginSuccessful() {
         return driver.findElement(swagLabsTitle).isDisplayed();
     }
+
+    public boolean isOnLoginPage() {
+        return driver.getCurrentUrl().equals("https://www.saucedemo.com/") &&
+                driver.findElement(By.id("login-button")).isDisplayed();
+    }
  }

@@ -15,9 +15,15 @@ public final class AllureReporter {
     private AllureReporter() {}
 
     public static void captureScreenshot(WebDriver driver, String attachmentName) {
-        getScreenshot(driver).ifPresent(screenshot -> {
+        if (driver == null) return;
+
+        try {
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            byte[] screenshot = ts.getScreenshotAs(OutputType.BYTES);
             Allure.addAttachment(attachmentName, "image/png", new ByteArrayInputStream(screenshot), ".png");
-        });
+        } catch (Exception e) {
+            logger.error("Could not capture screenshot: {}", e.getMessage());
+        }
     }
 
     public static void capturePageSource(WebDriver driver, String attachmentName) {

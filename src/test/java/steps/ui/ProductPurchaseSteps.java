@@ -26,7 +26,7 @@ public class ProductPurchaseSteps {
         selectedProductPrice = productsPage.getFirstProductPrice();
 
         AllureReporter.stepWithScreenshot(driver, "Add first product to cart", () -> productsPage.addFirstProductToCart());
-        AllureReporter.stepWithScreenshot(driver, "Click cart icon", () -> productsPage.clickCart());
+        AllureReporter.stepWithScreenshot(driver, "Click add to cart", () -> productsPage.clickCart());
     }
 
     @When("^the user proceeds to checkout and fills in their (.+), (.+) and (.+)$")
@@ -45,7 +45,7 @@ public class ProductPurchaseSteps {
     public void theUserReviewsAndCompletesPurchase() {
         checkoutOverviewPage = new CheckoutOverviewPage(driver);
 
-        Assertions.assertEquals(selectedProductName, checkoutOverviewPage.getProductName(),
+        Assertions.assertEquals("selectedProductName", checkoutOverviewPage.getProductName(),
                 "Product name in cart doesn't match selected product name.");
         Assertions.assertEquals(selectedProductPrice, checkoutOverviewPage.getProductPrice(),
                 "Product price in cart doesn't match selected product price.");

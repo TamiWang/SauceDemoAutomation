@@ -1,5 +1,5 @@
 Feature: Product Purchase Flow
-  @e2e
+  @e2e @purchase
   Scenario Outline: User completes a product purchase successfully
     Given the user logs in as <username>
     When the user adds the first product to the cart

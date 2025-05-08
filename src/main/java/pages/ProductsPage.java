@@ -56,5 +56,13 @@ public class ProductsPage {
     public void clickCart() {
         driver.findElement(cartIcon).click();
     }
+
+    public void clickMenuButton() {
+        driver.findElement(By.id("react-burger-menu-btn")).click();
+    }
+
+    public void clickLogoutLink() {
+        driver.findElement(By.id("logout_sidebar_link")).click();
+    }
 }
 

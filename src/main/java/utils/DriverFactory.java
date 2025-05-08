@@ -19,11 +19,11 @@ public class DriverFactory {
     private static WebDriver driver;
     private static final Logger logger = LoggerFactory.getLogger(DriverFactory.class);
 
-    public DriverFactory() {
+    private DriverFactory() {
         initDriver();
     }
 
-    public void initDriver() {
+    public static void initDriver() {
         if (driver == null) {
             String browser = System.getProperty("browser", "chrome").toLowerCase();
 
@@ -45,6 +45,13 @@ public class DriverFactory {
 
     public static WebDriver getDriver() {
         return driver;
+    }
+
+    public static void quitDriver() {
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
 
     private static ChromeOptions getChromeOptions() {
@@ -111,12 +118,5 @@ public class DriverFactory {
         ));
 
         return options;
-    }
-
-    public void quitDriver() {
-        if (driver != null) {
-            driver.quit();
-            driver = null;
-        }
     }
 }
