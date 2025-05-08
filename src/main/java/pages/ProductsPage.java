@@ -18,6 +18,7 @@ public class ProductsPage {
     private final By inventoryContainer = By.id("inventory_container");
     private final By firstAddToCartButton = By.cssSelector(".inventory_list .inventory_item:first-of-type button");
     private final By firstProductName = By.cssSelector(".inventory_list .inventory_item:first-of-type .inventory_item_name");
+    private final By firstProductPrice = By.cssSelector(".inventory_list .inventory_item:first-of-type .inventory_item_price");
     private final By cartIcon = By.className("shopping_cart_link");
 
     public ProductsPage(WebDriver driver) {
@@ -46,6 +47,10 @@ public class ProductsPage {
 
     public String getFirstProductName() {
         return driver.findElement(firstProductName).getText();
+    }
+
+    public String getFirstProductPrice() {
+        return driver.findElement(firstProductPrice).getText();
     }
 
     public void clickCart() {

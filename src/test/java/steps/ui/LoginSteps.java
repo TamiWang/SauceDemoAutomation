@@ -16,14 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginSteps {
-    private final WebDriver driver;
+    private final WebDriver driver = DriverFactory.getDriver();
     private LoginPage loginPage;
     private ProductsPage productsPage;
     private List<Map<String, String>> testData;
-
-    public LoginSteps(DriverFactory driverFactory) {
-        this.driver = driverFactory.getDriver();
-    }
 
     @Given("The user opens the SauceDemo login page")
     public void open_browser() {

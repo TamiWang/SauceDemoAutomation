@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DriverFactory {
-    private WebDriver driver;
+    private static WebDriver driver;
     private static final Logger logger = LoggerFactory.getLogger(DriverFactory.class);
 
     public DriverFactory() {
         initDriver();
     }
 
-    public WebDriver initDriver() {
+    public void initDriver() {
         if (driver == null) {
             String browser = System.getProperty("browser", "chrome").toLowerCase();
 
@@ -41,10 +41,9 @@ public class DriverFactory {
 
             driver.manage().window().maximize();
         }
-        return driver;
     }
 
-    public WebDriver getDriver() {
+    public static WebDriver getDriver() {
         return driver;
     }
 
